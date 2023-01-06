@@ -1,7 +1,10 @@
 const url = window.location.search
 const urlParams = new URLSearchParams(url)
 const id = urlParams.get("id")
-
+if (id != null) {
+let kanapPrice = 0
+let kanapImgUrl, kanapAltTxt
+}
 
 fetch("http://localhost:3000/api/products/" + id)
 .then((response) => response.json())
@@ -9,7 +12,10 @@ fetch("http://localhost:3000/api/products/" + id)
 
 function handleData(kanap) {
   console.log({kanap})
-const { altTxt, colors, description, imageUrl, name, price, _id} = kanap
+const { altTxt, colors, description, imageUrl, name, price} = kanap
+kanapPrice= price
+kanapImgUrl = imageUrl
+kanapAltTxt = altTxt
 productImg(imageUrl, altTxt)
 productPrice(price)
 productTitle(name)
@@ -45,9 +51,42 @@ function productColors(colors) {
   if(elColors != null) {
     colors.forEach((color) => {
       const option = document.createElement("option")
-      // option.value = color
-      // option.textContent = color
-      // Selection.appendChild(option)
+      option.value = color
+      option.textContent = color
+      elColors.appendChild(option)
     });
+  }
+}
+
+const button = document.querySelector("#addToCart")
+if(button != null) {
+  button.addEventListener("click", (e) => {
+    const color = document.querySelector("#colors").value
+    const quantity = document.querySelector("#quantity").value
+    if (lookIfOrderIsNotOk(color, quantity)) {
+      return
+    }
+    recordCart(color, quantity)
+    
+    window.location.href = "cart.html"
+  })
+}
+
+
+function recordCart(color,quantity) {
+  const object = {
+    id: id,
+    color: color,
+    quantity: Number(quantity),
+    price: kanapPrice,
+    imageUrl: kanapImgUrl,
+    altTxt: kanapAltTxt 
+  }
+  localStorage.setItem(id, JSON.stringify(object))
+}
+function lookIfOrderIsNotOk(color, quantity){
+  if (color == null || color === "" || quantity == null || quantity == 0) {
+    alert("please choose a color and quantity")
+    return true
   }
 }
