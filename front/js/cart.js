@@ -1,6 +1,7 @@
 const cart = []
 
 findAndParseProduct()
+
 cart.forEach((product) => displayProduct(product))
 
 function findAndParseProduct() {
@@ -12,21 +13,60 @@ function findAndParseProduct() {
     }
 }
 
+// altTxt
+// : 
+// "Photo d'un canapé d'angle, vert, trois places"
+// color
+// : 
+// "Green"
+// id
+// : 
+// "055743915a544fde83cfdfc904935ee7"
+// imageUrl
+// : 
+// "http://localhost:3000/images/kanap03.jpeg"
+// price
+// : 
+// 3199
+// quantity
+// : 
+
+
 function displayProduct(product){
     const article = createArticle(product)
- const imageProduct = productImg(product)
+    displayArticle(article)
+    productImgForDiv(product)
+    const div = productImgForDiv(product)
+    article.appendChild(div)
+
 }
 
-function productImg(product) {
-    const img = document.createElement("img")
-    img.src = product.ImageUrl
-    img.alt = product.altTxt
-    return img
+function displayArticle(article) {
+    document.querySelector("#cart__items").appendChild(article)
 }
 
-// function createArticle(product) {
-//     const article = 
-// }
+function createArticle(product) {
+    const article = document.createElement("article")
+    console.log(article)
+    article.classList.add("cart__item")
+    article.dataset.id = product.id
+    article.dataset.color = product.color
+    return article
+    
+}
+
+function productImgForDiv(product) {
+    const div = document.createElement("div")
+    div.classList.add("cart__item__img")
+    const image = document.createElement("img")
+    image.src = product.imageUrl
+    image.alt = product.altTxt
+    div.appendChild(image)
+    
+    return div
+}
+
+
 
 
 // <!-- <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
