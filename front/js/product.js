@@ -12,14 +12,14 @@ fetch("http://localhost:3000/api/products/" + id)
 
 function handleData(kanap) {
   console.log(kanap)
-  kanapPrice = price
-  kanapImgUrl = imageUrl
-  kanapAltTxt = altTxt
-  productImg(imageUrl, altTxt)
-  productPrice(price)
-  productTitle(name)
-  productDescription(description)
-  productColors(colors)
+  kanapPrice = kanap.price
+  kanapImgUrl = kanap.imageUrl
+  kanapAltTxt = kanap.altTxt
+  productImg(kanap.imageUrl, kanap.altTxt)
+  productPrice(kanap.price)
+  productTitle(kanap.name)
+  productDescription(kanap.description)
+  productColors(kanap.colors)
 }
 
 
@@ -30,25 +30,25 @@ function productImg(imageUrl, altTxt) {
   const addImage = document.querySelector(".item__img")
   if (addImage != null) addImage.appendChild(image)
 }
-function productPrice(price) {
+function productPrice(kanap.price) {
   const elPrice = document.querySelector("#price")
-  if (price != null) elPrice.price = elPrice.textContent = price
+  if (price != null) elPrice.price = elPrice.textContent = kanap.price
 }
 
-function productTitle(name) {
+function productTitle(kanap.name) {
 const elTitle  = document.querySelector("#title")
-if (elTitle != null) elTitle.name = elTitle.textContent = name
+if (elTitle != null) elTitle.name = elTitle.textContent = kanap.name
 }
 
-function productDescription(description) {
+function productDescription(kanap.description) {
 const elDescription = document.querySelector("#description")
-if (elDescription != null) elDescription.description = elDescription.textContent = description
+if (elDescription != null) elDescription.description = elDescription.textContent = kanap.description
 }
 
-function productColors(colors) {
+function productColors(kanap.colors) {
   const elColors = document.querySelector("#colors")
   if(elColors != null) {
-    colors.forEach((color) => {
+    kanap.colors.forEach((color) => {
       const option = document.createElement("option")
       option.value = color
       option.textContent = color
@@ -66,7 +66,7 @@ if(button != null) {
       return
     }
     
-    recordCart(color, quantity)
+    recordCart(kanap.color, kanap.quantity)
     
     window.location.href = "cart.html"
   })
@@ -82,7 +82,7 @@ function recordCart(color,quantity) {
   if (localStorage.getItem(object) !== null) 
   productArray = localStorage.setItem(id, JSON.stringify(object))
 
-  
+
   console.log(productArray )
 }
 function lookIfOrderIsNotOk(color, quantity){
