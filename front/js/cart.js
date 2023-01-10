@@ -6,11 +6,14 @@ cart.forEach((product) => displayProduct(product))
 
 function findAndParseProduct() {
     const obectAdded = localStorage.length
-    for(let i = 0; i <= obectAdded; i++) {
+    for(let i = 0; i < obectAdded; i++) {
         const product = localStorage.getItem(localStorage.key(i))
         const productObject = JSON.parse(product)
         cart.push(productObject)
+
     }
+    
+    
 }
 
 // altTxt
@@ -39,6 +42,10 @@ function displayProduct(product){
     const div = productImgForDiv(product)
     article.appendChild(div)
 
+    const cardItemcontent = cardItemcontent(product)
+    article.appenchild(cardItemcontent)
+    displayArticle(article)
+
 }
 
 function displayArticle(article) {
@@ -47,7 +54,7 @@ function displayArticle(article) {
 
 function createArticle(product) {
     const article = document.createElement("article")
-    console.log(article)
+    
     article.classList.add("cart__item")
     article.dataset.id = product.id
     article.dataset.color = product.color
@@ -62,12 +69,32 @@ function productImgForDiv(product) {
     image.src = product.imageUrl
     image.alt = product.altTxt
     div.appendChild(image)
-    
     return div
 }
 
 
 
+function cardItemContent(product) {
+    const div = document.createElement("div")
+    div.classList.add("cart__item__content")
+
+    const description = document.createElement("div")
+    description.classList.add(cart__item__content__description)
+
+    const h2 = document.createElement("h2")
+    h2.textContent = product.name
+
+    const pColor = document.createElement("p")
+    pColor.textContent = product.color
+
+    const pPrice = document.createElement("p")
+    pPrice.textContent = product.price + "€"
+
+    description.appendChild(h2, pColor, pPrice)
+    div.appenchild(description)
+    console.log(div)
+    return div
+}
 
 // <!-- <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
 //                 <div class="cart__item__img">
