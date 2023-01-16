@@ -1,7 +1,8 @@
+//Je récupère tous les produits et les affiches sur ma page Accueil
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((data) => {
-    //console.log(data);
+    
     data.forEach(product => {
       const el = document.createElement('a');
       el.setAttribute('href',`./product.html?id=${product._id}`);
