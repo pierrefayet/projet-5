@@ -152,19 +152,17 @@ const formErrorMsg = document.createElement('p');
 formErrorMsg.classList.add('error_form_not_valid');
 submitValidation.appendChild(formErrorMsg);
 
-const existingProduct = cartItems.find(item => item.id === id && item.color === color);
-let erreur = document.querySelector("p");
 const inputCheked = document.querySelector("#order");
 inputCheked.addEventListener('click', (e) => {
     
     if (
-        !inputFirstName.value &&
-        !inputLastName.value &&
-        !inputLastName.value &&
-        !inputCity.value &&
-        !inputAddress.value &&
-        !inputMail.value &&
-        existingProduct == undefined
+        !inputFirstName.value ||
+        !inputLastName.value ||
+        !inputCity.value ||
+        !inputAddress.value ||
+        !inputMail.value ||
+        cart.length === 0 ||
+        !localStorage.length
         
     ) {
         alert("veuillez renseigner tous les champs");
