@@ -7,7 +7,18 @@ function setTotalPrice(cart) {
     const totalPriceEl = document.querySelector('#totalPrice');
     totalPriceEl.textContent = totalPrice;
 }
-function  getCart() {
+
+function totalQuantity(cart) {
+    let totalQuantity = 0;
+    cart.forEach((product) => { 
+        totalQuantity = product.quantity + totalQuantity;
+        document.getElementById("totalQuantity").textContent = totalQuantity;
+        console.log(totalQuantity);
+})
+
+}
+
+function getCart() {
     return JSON.parse(localStorage.getItem('cart'))
 }
 function display() {
@@ -15,7 +26,8 @@ function display() {
     let toto = document.querySelector("#cart__items");
     toto.innerHTML = "";
     let productCart = getCart();
-    
+    document.getElementById("totalPrice").textContent = 0;
+    document.getElementById("totalQuantity").textContent = totalQuantity(cart);
     productCart.forEach((product) => {
         fetch(`http://localhost:3000/api/products/${product.id}`)
             .then((response) => response.json())
@@ -82,8 +94,8 @@ function display() {
                     localStorage.setItem('cart', JSON.stringify(cartToUpdate));
                     display();
                 })
-
-
+                
+                totalQuantity(productCart);
                 setTotalPrice(productCart);
                 const divContentDelete = document.createElement("div");
                 divContentDelete.classList.add("cart__item__content__settings__delete");
@@ -106,10 +118,8 @@ function display() {
                             return true
                         }
                     })
-                    console.log(cartToUpdate)
-                    //console.log(item)
-                    console.log(product)
                     localStorage.setItem('cart', JSON.stringify(cartToUpdate ));
+                    
                     display();
                 });
             })
@@ -121,7 +131,7 @@ display()
 
 //creer un nouveau array contact et on pousse dedans l'articleet on vérifie que les champs sont au bon format
 const regexName = /^[A-Za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ'-\s]+$/i;
-const regexAddress = /^[A-za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ0-9-\s]{5,200}$/;
+const regexAddress = /^[A-za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ0-9-\s']{5,200}$/;
 const regexEmail = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 contact = [];
 let inputFirstName = document.querySelector("#firstName");
