@@ -8,26 +8,27 @@ function setTotalPrice(cart) {
     totalPriceEl.textContent = totalPrice;
 }
 
-function totalQuantity(cart) {
-    let totalQuantity = 0;
-    cart.forEach((product) => { 
-        totalQuantity = product.quantity + totalQuantity;
-        document.getElementById("totalQuantity").textContent = totalQuantity;
-        console.log(totalQuantity);
-})
 
+
+function totalProductQuantity(cart) {
+    let totalQuantity = 0;
+    cart.forEach((product) => {
+        totalQuantity += product.quantity;
+    })
+    document.getElementById("totalQuantity").textContent = totalQuantity;
 }
 
 function getCart() {
     return JSON.parse(localStorage.getItem('cart'))
 }
-function display() {
+
 //on recupere l'element qui contient les produits et le reinitialise
+function display() {
     let toto = document.querySelector("#cart__items");
     toto.innerHTML = "";
     let productCart = getCart();
-    document.getElementById("totalPrice").textContent = 0;
-    document.getElementById("totalQuantity").textContent = totalQuantity(cart);
+    totalProductQuantity(productCart);
+    setTotalPrice(productCart);
     productCart.forEach((product) => {
         fetch(`http://localhost:3000/api/products/${product.id}`)
             .then((response) => response.json())
@@ -88,50 +89,50 @@ function display() {
                 inputQuantity.value = product.quantity;
                 divContentSetting.appendChild(inputQuantity);
                 inputQuantity.addEventListener('change', (event) => {
-                    let cartToUpdate = getCart();
-                    const productToUpdate = cartToUpdate.find(item => item.id === product.id && item.color === product.color);
-                    productToUpdate.quantity = event.target.value;
+                    const cartToUpdate = getCart();
+                    let productToUpdate = cartToUpdate.find(item => item.id === product.id && item.color === product.color);
+                    productToUpdate.quantity = parseInt(event.target.value);
                     localStorage.setItem('cart', JSON.stringify(cartToUpdate));
-                    display();
+                    display()
                 })
-                
-                totalQuantity(productCart);
+
+                totalProductQuantity(productCart);
                 setTotalPrice(productCart);
                 const divContentDelete = document.createElement("div");
                 divContentDelete.classList.add("cart__item__content__settings__delete");
                 divContentSetting.appendChild(divContentDelete);
 
                 const pDelete = document.createElement("p");
-                
                 pDelete.classList.add("deleteItem");
                 pDelete.textContent = "Supprimer";
                 divContentDelete.appendChild(pDelete);
-
                 pDelete.addEventListener("click", (event) => {
                     let cartToUpdate = JSON.parse(localStorage.getItem('cart'))
-                    cartToUpdate = cartToUpdate.filter((item) => { 
+                    cartToUpdate = cartToUpdate.filter((item) => {
                         if (item.id === product.id && item.color === product.color) {
-                            
+
                             return false
-                        }else{
-                            
+                        } else {
+
                             return true
                         }
                     })
-                    localStorage.setItem('cart', JSON.stringify(cartToUpdate ));
-                    
+                    localStorage.setItem('cart', JSON.stringify(cartToUpdate));
+
                     display();
+
                 });
-            })
-    });
+            });
+    })
+
 }
-//je récupère le produit avec l'api et parcours le tableau pour récupérer ses données et les insérer dans le html 
+
 let totalPrice = 0;
 display()
 
 //creer un nouveau array contact et on pousse dedans l'articleet on vérifie que les champs sont au bon format
 const regexName = /^[A-Za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ'-\s]+$/i;
-const regexAddress = /^[A-za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ0-9-\s']{5,200}$/;
+const regexAddress = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9\s,'-]*$/;
 const regexEmail = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 contact = [];
 let inputFirstName = document.querySelector("#firstName");
