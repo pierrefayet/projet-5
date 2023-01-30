@@ -24,8 +24,8 @@ function getCart() {
 
 //on recupere l'element qui contient les produits et le reinitialise
 function display() {
-    let toto = document.querySelector("#cart__items");
-    toto.innerHTML = "";
+    let itemCard = document.querySelector("#cart__items");
+    itemCard.innerHTML = "";
     let productCart = getCart();
     totalProductQuantity(productCart);
     setTotalPrice(productCart);
@@ -130,7 +130,7 @@ function display() {
 let totalPrice = 0;
 display()
 
-//creer un nouveau array contact et on pousse dedans l'articleet on vérifie que les champs sont au bon format
+//creer un nouveau array contact et on pousse dedans l'article et on vérifie que les champs sont au bon format
 const regexName = /^[A-Za-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ'-\s]+$/i;
 const regexAddress = /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9\s,'-]*$/;
 const regexEmail = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
