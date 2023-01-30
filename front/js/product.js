@@ -50,6 +50,16 @@ function productColors(colors) {
 		elColors.appendChild(option);
 	});
 }
+
+itemQuantity = document.querySelector('#quantity');
+itemQuantity.addEventListener('change', (event) => {
+	let quantityValue  = parseInt(event.target.value);
+	if(quantityValue  > 100) {
+		quantityValue = 100;
+		document.querySelector('#quantity').value = quantityValue; 
+	}
+});
+
 const button = document.querySelector("#addToCart");
 button.addEventListener("click", () => {
 	const color = document.querySelector("#colors").value;
@@ -64,8 +74,9 @@ let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
 function recordCart(color, quantity) {
 	const existingProduct = cartItems.find(item => item.id === id && item.color === color);
-	if(existingProduct !== undefined) {
+	if(existingProduct !== undefined && quantityValue  > 100) {
 		existingProduct.quantity += Number(quantity);
+		quantityValue  > 100;
 	} else {
 		const object = {
 			id: id,

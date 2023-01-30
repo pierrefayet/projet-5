@@ -1,25 +1,18 @@
 //je calcule le prix par rapport au la quantité
-function setTotalPrice(cart) {
+function setTotalPriceAndQuantity(cart) {
     let totalPrice = 0;
+    let totalQuantity = 0;
     cart.forEach((product) => {
         totalPrice += product.price * product.quantity;
+        totalQuantity += product.quantity;
     })
     const totalPriceEl = document.querySelector('#totalPrice');
+    document.getElementById("totalQuantity").textContent = totalQuantity;
     totalPriceEl.textContent = totalPrice;
 }
 
-
-
-function totalProductQuantity(cart) {
-    let totalQuantity = 0;
-    cart.forEach((product) => {
-        totalQuantity += product.quantity;
-    })
-    document.getElementById("totalQuantity").textContent = totalQuantity;
-}
-
 function getCart() {
-    return JSON.parse(localStorage.getItem('cart'))
+    return JSON.parse(localStorage.getItem('cart'))|| [];
 }
 
 //on recupere l'element qui contient les produits et le reinitialise
@@ -27,8 +20,7 @@ function display() {
     let itemCard = document.querySelector("#cart__items");
     itemCard.innerHTML = "";
     let productCart = getCart();
-    totalProductQuantity(productCart);
-    setTotalPrice(productCart);
+    setTotalPriceAndQuantity(productCart);
     productCart.forEach((product) => {
         fetch(`http://localhost:3000/api/products/${product.id}`)
             .then((response) => response.json())
@@ -89,15 +81,18 @@ function display() {
                 inputQuantity.value = product.quantity;
                 divContentSetting.appendChild(inputQuantity);
                 inputQuantity.addEventListener('change', (event) => {
+                    let quantityValue  = parseInt(event.target.value);
+                    if(quantityValue  > 100) {
+                        quantityValue = 100;
+                    }
                     const cartToUpdate = getCart();
                     let productToUpdate = cartToUpdate.find(item => item.id === product.id && item.color === product.color);
-                    productToUpdate.quantity = parseInt(event.target.value);
+                    productToUpdate.quantity = quantityValue;
                     localStorage.setItem('cart', JSON.stringify(cartToUpdate));
                     display()
                 })
 
-                totalProductQuantity(productCart);
-                setTotalPrice(productCart);
+                setTotalPriceAndQuantity(productCart);
                 const divContentDelete = document.createElement("div");
                 divContentDelete.classList.add("cart__item__content__settings__delete");
                 divContentSetting.appendChild(divContentDelete);
@@ -189,15 +184,17 @@ const inputCheked = document.querySelector("#order");
 inputCheked.addEventListener('click', (e) => {
     let cart = getCart();
     e.preventDefault()
+    if(cart.length == 0) {
+        alert('Votre panier est vide')
+        return;
+    }
     if (
         !inputFirstName.value ||
         !inputLastName.value ||
         !inputCity.value ||
         !inputAddress.value ||
         !inputMail.value ||
-        cart.length === 0 ||
-        !localStorage.length
-
+        !localStorage.length 
     ) {
         alert("veuillez renseigner tous les champs");
     } else {
